@@ -22,7 +22,6 @@ def place(place_id):
 
             if request.method == 'PUT':
                 res = request.get_json()
-                print(res)
                 if res is None:
                     abort(400, description='Not a JSON')
                 for k, v in res.items():
