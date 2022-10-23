@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 """Module users.py: contains users information"""
 from api.v1.views import app_views
 from flask import jsonify, request, abort

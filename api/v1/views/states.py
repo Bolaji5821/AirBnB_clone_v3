@@ -51,7 +51,6 @@ def state(state_id):
                         continue
                     setattr(state, k, v)
                 state.save()
-                
             return jsonify(state.to_dict())
 
     abort(404)
