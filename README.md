@@ -156,7 +156,7 @@ No known bugs at this time.
 ## Authors
 Cecilia Atabong - [Github](https://github.com/cecilia-89) / [Twitter](https://twitter.com/CAtabong)
 Yohannes Gezahegn - [Github](https://github.com/jhuang10123) / [Twitter](https://twitter.com/earthtojhuang)
-
+Oyedele Bolaji - [Github](https://github.com/Bolaji5821) / [Twitter](https://twitter.com/beeohjay)
 Second part of Airbnb: Joann Vuong
 ## License
 Public Domain. No copy write protection.
