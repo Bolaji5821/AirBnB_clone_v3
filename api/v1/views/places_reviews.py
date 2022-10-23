@@ -40,28 +40,26 @@ def review(review_id):
                  strict_slashes=False)
 def reviews(place_id):
     """displays and creates an review"""
-    if request.method == 'POST':
-        res = request.get_json()
+    for place in storage.all(Place).values():
+        if place_id == place.id:
+            if request.method == 'POST':
+                res = request.get_json()
+                if res is None:
+                    abort(400, description='Not a JSON')
+                if 'text' not in res.keys():
+                    abort(400, description='Missing text')
+                if 'user_id' not in res.keys():
+                    abort(400, description='Missing user_id')
 
-        if res is None:
-            abort(400, description='Not a JSON')
-        if 'text' not in res.keys():
-            abort(400, description='Missing text')
-        if 'user_id' not in res.keys():
-            abort(400, description='Missing user_id')
-
-        users = [user.id for user in storage.all(User).values()]
-        if res['user_id'] not in users:
-            abort(404)
-
-        for place in storage.all(Place).values():
-            if place_id == place.id:
+                users = [user.id for user in storage.all(User).values()]
+                if res['user_id'] not in users:
+                    abort(404)
                 res['place_id'] = place.id
                 new_review = Review(**res)
                 new_review.save()
                 return jsonify(new_review.to_dict()), 201
 
-        abort(404)
+            review = [v.to_dict() for v in storage.all(Review).values()]
+            return jsonify(review)
 
-    review = [v.to_dict() for v in storage.all(Review).values()]
-    return jsonify(review)
+    abort(404)
