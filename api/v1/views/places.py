@@ -59,7 +59,8 @@ def places(city_id):
                 new_place.save()
                 return jsonify(new_place.to_dict()), 201
 
-            place = [v.to_dict() for v in storage.all(Place).values()]
+            place = [v.to_dict() for v in storage.all(Place).values()
+                     if v.city_id = city_id]
             return jsonify(place)
 
     abort(404)
