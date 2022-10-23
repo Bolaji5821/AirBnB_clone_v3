@@ -48,7 +48,6 @@ def users():
         if 'password' not in res.keys():
             abort(400, description='Missing password')
 
-
         new_user = User(**res)
         new_user.save()
         return jsonify(new_user.to_dict()), 201
