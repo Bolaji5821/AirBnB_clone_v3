@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""Module app.py: starts the flask app"""
+"""Module index.py: starts the flask app"""
 from api.v1.views import app_views
 from flask import jsonify
 from models import storage
