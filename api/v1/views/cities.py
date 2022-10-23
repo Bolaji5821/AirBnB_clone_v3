@@ -12,24 +12,25 @@ from models import storage
                  strict_slashes=False)
 def cities(state_id):
     """displays and creates a city"""
-    if request.method == 'POST':
-        res = request.get_json()
-        if res is None:
-            abort(400, description='Not a JSON')
-        if 'name' not in res.keys():
-            abort(400, description='Missing name')
+    for state in storage.all(State).values():
+        if state.id == state_id:
+            if request.method == 'POST':
+                res = request.get_json()
+                if res is None:
+                    abort(400, description='Not a JSON')
+                if 'name' not in res.keys():
+                    abort(400, description='Missing name')
+                    res['state_id'] = state_id
+                    new_city = City(**res)
+                    new_city.save()
+                    return jsonify(new_city.to_dict()), 201
 
-        for state in storage.all(State).values():
-            if state.id == state_id:
-                res['state_id'] = state_id
-                new_city = City(**res)
-                new_city.save()
-                return jsonify(new_city.to_dict()), 201
-        abort(404)
-
-    city = [v.to_dict() for k, v in storage.all(City).items()
+            city = [v.to_dict() for k, v in storage.all(City).items()
             if v.state_id == state_id]
-    return jsonify(city)
+            return jsonify(city)
+
+    abort(404)
+
 
 
 @app_views.route('cities/<city_id>',
