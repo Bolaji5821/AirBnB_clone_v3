@@ -17,7 +17,7 @@ def states():
         if response is None:
             abort(400, description='Not a JSON')
 
-        if 'name' not in list(response.keys()):
+        if 'name' not in response.keys():
             abort(400, description='Missing name')
         new_state = State(**response)
         new_state.save()
@@ -49,7 +49,7 @@ def state(state_id):
         for k, v in response.items():
             if k.endswith('ated_at') or k == 'id':
                 continue
-                etattr(state, k, v)
+            setattr(state, k, v)
         state.save()
     return jsonify(state.to_dict())
 
