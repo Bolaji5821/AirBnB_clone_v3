@@ -35,7 +35,6 @@ def review(review_id):
     return jsonify(review.to_dict())
 
 
-
 @app_views.route('/places/<place_id>/reviews',
                  methods=['GET', 'POST'],
                  strict_slashes=False)
@@ -65,4 +64,3 @@ def reviews(place_id):
     review = [v.to_dict() for v in storage.all(Review).values()
               if v.place_id == place_id]
     return jsonify(review)
-
