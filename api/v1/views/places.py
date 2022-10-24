@@ -13,26 +13,26 @@ from models import storage
                  strict_slashes=False)
 def place(place_id):
     """returns an place based on it's id"""
-    for place in storage.all(Place).values():
-        if place.id == place_id:
-            if request.method == 'DELETE':
-                place.delete()
-                storage.save()
-                return '{}'
+    place = storage.get(Place, place_id)
+    if place is none:
+        abort(404)
 
-            if request.method == 'PUT':
-                res = request.get_json()
-                if res is None:
-                    abort(400, description='Not a JSON')
-                for k, v in res.items():
-                    if k.endswith('ed_at') or k.endswith('id'):
-                        continue
-                    setattr(place, k, v)
-                place.save()
+    if request.method == 'DELETE':
+        place.delete()
+        storage.save()
+        return '{}'
 
-            return jsonify(place.to_dict())
+    if request.method == 'PUT':
+        res = request.get_json()
+        if res is None:
+            abort(400, description='Not a JSON')
+        for k, v in res.items():
+            if k.endswith('ed_at') or k.endswith('id'):
+                continue
+            setattr(place, k, v)
+        place.save()
 
-    abort(404)
+    return jsonify(place.to_dict())
 
 
 @app_views.route('/cities/<city_id>/places',
@@ -40,27 +40,28 @@ def place(place_id):
                  strict_slashes=False)
 def places(city_id):
     """displays and creates an place"""
-    for city in storage.all(City).values():
-        if city_id == city.id:
-            if request.method == 'POST':
-                res = request.get_json()
-                if res is None:
-                    abort(400, description='Not a JSON')
-                if 'name' not in res.keys():
-                    abort(400, description='Missing name')
-                if 'user_id' not in res.keys():
-                    abort(400, description='Missing user_id')
+    city = storage.get(City, city_id)
+    if city is None:
+        abort(404)
 
-                users = [user.id for user in storage.all(User).values()]
-                if res['user_id'] not in users:
-                    abort(404)
-                res['city_id'] = city.id
-                new_place = Place(**res)
-                new_place.save()
-                return jsonify(new_place.to_dict()), 201
+    if request.method == 'POST':
+        res = request.get_json()
+        if res is None:
+            abort(400, description='Not a JSON')
+        if 'name' not in res.keys():
+            abort(400, description='Missing name')
+        if 'user_id' not in res.keys():
+            abort(400, description='Missing user_id')
 
-            place = [v.to_dict() for v in storage.all(Place).values()
-                     if v.city_id == city_id]
-            return jsonify(place)
+        user = storage.get(User, res['user_id'])
+        if user is None:
+            abort(404)
+        res['city_id'] = city.id
+        new_place = Place(**res)
+        new_place.save()
+        return jsonify(new_place.to_dict()), 201
 
-    abort(404)
+    place = [v.to_dict() for v in storage.all(Place).values()
+             if v.city_id == city_id]
+    return jsonify(place)
+

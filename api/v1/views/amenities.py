@@ -11,26 +11,26 @@ from models import storage
                  strict_slashes=False)
 def amenity(amenity_id):
     """returns an amenity based on it's id"""
-    for amenity in storage.all(Amenity).values():
-        if amenity.id == amenity_id:
-            if request.method == 'DELETE':
-                amenity.delete()
-                storage.save()
-                return '{}'
+    amenity = storage.get(Amenity, amenity_id)
+    if amenity is None:
+        abort(404)
 
-            elif request.method == 'PUT':
-                res = request.get_json()
-                if res is None:
-                    abort(400, description='Not a JSON')
-                for k, v in res.items():
-                    if k.endswith('ed_at') or k == 'state_id' or k == 'id':
-                        continue
-                    setattr(amenity, k, v)
-                amenity.save()
+    if request.method == 'DELETE':
+        amenity.delete()
+        storage.save()
+        return '{}'
 
-            return jsonify(amenity.to_dict())
+    elif request.method == 'PUT':
+        res = request.get_json()
+        if res is None:
+            abort(400, description='Not a JSON')
+        for k, v in res.items():
+            if k.endswith('ed_at') or k == 'state_id' or k == 'id':
+                continue
+            setattr(amenity, k, v)
+        amenity.save()
 
-    abort(404)
+    return jsonify(amenity.to_dict())
 
 
 @app_views.route('/amenities',

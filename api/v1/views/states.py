@@ -33,24 +33,23 @@ def states():
 def state(state_id):
     """returns a state based on the id"""
 
-    for state in storage.all(State).values():
+    state = storage.get(State, state_id)
+    if state is None:
+        abort(404)
 
-        if state.id == state_id:
+    if request.method == 'DELETE':
+        state.delete()
+        storage.save()
+        return '{}'
 
-            if request.method == 'DELETE':
-                state.delete()
-                storage.save()
-                return '{}'
+    if request.method == 'PUT':
+        response = request.get_json()
+        if response is None:
+            abort(400, description='Not a JSON')
+        for k, v in response.items():
+            if k.endswith('ated_at') or k == 'id':
+                continue
+                etattr(state, k, v)
+        state.save()
+    return jsonify(state.to_dict())
 
-            if request.method == 'PUT':
-                response = request.get_json()
-                if response is None:
-                    abort(400, description='Not a JSON')
-                for k, v in response.items():
-                    if k.endswith('ated_at') or k == 'id':
-                        continue
-                    setattr(state, k, v)
-                state.save()
-            return jsonify(state.to_dict())
-
-    abort(404)
