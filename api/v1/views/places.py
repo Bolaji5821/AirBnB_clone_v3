@@ -12,9 +12,9 @@ from models import storage
                  methods=['GET', 'DELETE', 'PUT'],
                  strict_slashes=False)
 def place(place_id):
-    """returns an place based on it's id"""
+    """returns a place based on it's id"""
     place = storage.get(Place, place_id)
-    if place is none:
+    if place is None:
         abort(404)
 
     if request.method == 'DELETE':
