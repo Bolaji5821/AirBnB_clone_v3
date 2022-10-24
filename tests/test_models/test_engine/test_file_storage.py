@@ -41,8 +41,8 @@ class TestFileStorageDocs(unittest.TestCase):
         """Test tests/test_models/test_file_storage.py
         conforms to pycodestyle."""
         pycodestyles = pycodestyle.StyleGuide(quiet=True)
-        result = pycodestyles.check_files(['tests/test_models/test_engine/\
-test_file_storage.py'])
+        file = 'tests/test_models/test_engine/test_file_storage.py'
+        result = pycodestyles.check_files([file])
         self.assertEqual(result.total_errors, 0,
                          "Found code style errors (and warnings).")
 
@@ -114,3 +114,16 @@ class TestFileStorage(unittest.TestCase):
         with open("file.json", "r") as f:
             js = f.read()
         self.assertEqual(json.loads(string), json.loads(js))
+
+    def test_get(self):
+        """test the get method of the db storage"""
+        user = list(models.storage.all(User).values())[0].id
+        result = models.storage.get(User, user)
+        self.assertEqual(result.id, user)
+        self.assertTrue(type(user).__name__, 'User')
+
+    def test_count(self):
+        """test the count method of the db storage"""
+        user = list(models.storage.all(User).values())
+        length = models.storage.count(User)
+        self.assertEqual(length, len(user))
