@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""Module: starts the flask app"""
+"""Module: initializing the flask app"""
 from api.v1.views import app_views
 from flask import Flask, jsonify
 from flask_cors import CORS

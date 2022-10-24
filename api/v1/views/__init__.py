@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""Module __init__.py: creates a blueprint"""
+"""Module __init__.py: create a blueprint"""
 
 from flask import Blueprint
 
