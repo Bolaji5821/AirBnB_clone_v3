@@ -61,6 +61,5 @@ def reviews(place_id):
         new_review.save()
         return jsonify(new_review.to_dict()), 201
 
-    review = [v.to_dict() for v in storage.all(Review).values()
-              if v.place_id == place_id]
+    review = [v.to_dict() for v in place.reviews]
     return jsonify(review)
