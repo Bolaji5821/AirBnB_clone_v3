@@ -55,7 +55,7 @@ def reviews(place_id):
             abort(400, description='Missing user_id')
 
         user = storage.get(User, res['user_id'])
-        if user is none:
+        if user is None:
             abort(404)
         res['place_id'] = place.id
         new_review = Review(**res)

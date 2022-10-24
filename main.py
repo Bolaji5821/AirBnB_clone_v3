@@ -6,3 +6,4 @@ from models import storage
 
 users = [user.id for user in storage.all(User).values()]
 print(users)
+
