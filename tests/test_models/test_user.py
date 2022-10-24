@@ -132,3 +132,16 @@ class TestUser(unittest.TestCase):
         user = User()
         string = "[User] ({}) {}".format(user.id, user.__dict__)
         self.assertEqual(string, str(user))
+
+    def test_get(self):
+        """test the get method of the db storage"""
+        user = list(models.storage.all(User).values())[0].id
+        result = models.storage.get(User, user)
+        self.assertEqual(result.id, user)
+        self.assertTrue(type(user).__name__, 'User')
+
+    def test_count(self):
+        """test the count method of the db storage"""
+        user = list(models.storage.all(User).values())
+        length = models.storage.count(User)
+        self.assertEqual(length, len(user))

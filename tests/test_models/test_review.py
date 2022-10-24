@@ -122,3 +122,16 @@ class TestReview(unittest.TestCase):
         review = Review()
         string = "[Review] ({}) {}".format(review.id, review.__dict__)
         self.assertEqual(string, str(review))
+
+    def test_get(self):
+        """test the get method of the db storage"""
+        review = list(models.storage.all(Review).values())[0].id
+        result = models.storage.get(Review, review)
+        self.assertEqual(result.id, review)
+        self.assertTrue(type(review).__name__, 'City')
+
+    def test_count(self):
+        """test the count method of the db storage"""
+        review = list(models.storage.all(Review).values())
+        length = models.storage.count(Review)
+        self.assertEqual(length, len(review))
