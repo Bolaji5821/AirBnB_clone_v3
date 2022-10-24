@@ -1,9 +1,9 @@
 #!/usr/bin/python3
 """Module state.py: starts all routes with `state`"""
 from api.v1.views import app_views
-from flask import jsonify, request, abort
 from models.state import State
 from models import storage
+from flask import jsonify, request, abort
 
 
 @app_views.route('/states',
