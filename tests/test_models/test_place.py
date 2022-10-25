@@ -208,6 +208,8 @@ class TestPlace(unittest.TestCase):
 
     def test_count(self):
         """test the count method of the db storage"""
+        if models.storage.count(Place) == 0:
+            break
         place = list(models.storage.all(Place).values())
         length = models.storage.count(Place)
         self.assertEqual(length, len(place))

@@ -124,6 +124,8 @@ class TestReview(unittest.TestCase):
 
     def test_get(self):
         """test the get method of the db storage"""
+        if models.storage.count(Review) == 0:
+            break
         review = list(models.storage.all(Review).values())[0].id
         result = models.storage.get(Review, review)
         self.assertEqual(result.id, review)

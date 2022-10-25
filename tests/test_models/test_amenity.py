@@ -107,6 +107,8 @@ class TestAmenity(unittest.TestCase):
 
     def test_get(self):
         """test the get method of the db storage"""
+        if models.storage.count(Amenity) == 0:
+            break
         amenity = list(models.storage.all(Amenity).values())[0].id
         result = models.storage.get(Amenity, amenity)
         self.assertEqual(result.id, amenity)
