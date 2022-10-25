@@ -198,3 +198,16 @@ class TestPlace(unittest.TestCase):
         place = Place()
         string = "[Place] ({}) {}".format(place.id, place.__dict__)
         self.assertEqual(string, str(place))
+
+    def test_get(self):
+        """test the get method of the db storage"""
+        place = list(models.storage.all(Place).values())[0].id
+        result = models.storage.get(Place, place)
+        self.assertEqual(result.id, place)
+        self.assertTrue(type(place).__name__, 'Place')
+
+    def test_count(self):
+        """test the count method of the db storage"""
+        place = list(models.storage.all(Place).values())
+        length = models.storage.count(Place)
+        self.assertEqual(length, len(place))

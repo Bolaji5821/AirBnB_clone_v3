@@ -11,26 +11,25 @@ from models import storage
                  strict_slashes=False)
 def user(user_id):
     """returns an user based on it's id"""
-    for user in storage.all(User).values():
-        if user.id == user_id:
-            if request.method == 'DELETE':
-                user.delete()
-                storage.save()
-                return '{}'
+    user = storage.get(User, user_id)
+    if user is None:
+        abort(404)
+    if request.method == 'DELETE':
+        user.delete()
+        storage.save()
+        return '{}'
 
-            elif request.method == 'PUT':
-                res = request.get_json()
-                if res is None:
-                    abort(400, description='Not a JSON')
-                for k, v in res.items():
-                    if k.endswith('ed_at') or k == 'email' or k == 'id':
-                        continue
-                    setattr(user, k, v)
-                user.save()
+    elif request.method == 'PUT':
+        res = request.get_json()
+        if res is None:
+            abort(400, description='Not a JSON')
+        for k, v in res.items():
+            if k.endswith('ed_at') or k == 'email' or k == 'id':
+                continue
+            setattr(user, k, v)
+        user.save()
 
-            return jsonify(user.to_dict())
-
-    abort(404)
+    return jsonify(user.to_dict())
 
 
 @app_views.route('/users',

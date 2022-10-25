@@ -103,3 +103,16 @@ class TestState(unittest.TestCase):
         state = State()
         string = "[State] ({}) {}".format(state.id, state.__dict__)
         self.assertEqual(string, str(state))
+
+    def test_get(self):
+        """test the get method of the db storage"""
+        state = list(models.storage.all(State).values())[0].id
+        result = models.storage.get(State, state)
+        self.assertEqual(result.id, state)
+        self.assertTrue(type(state).__name__, 'State')
+
+    def test_count(self):
+        """test the count method of the db storage"""
+        state = list(models.storage.all(State).values())
+        length = models.storage.count(State)
+        self.assertEqual(length, len(state))

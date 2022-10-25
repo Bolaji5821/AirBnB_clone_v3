@@ -112,3 +112,16 @@ class TestCity(unittest.TestCase):
         city = City()
         string = "[City] ({}) {}".format(city.id, city.__dict__)
         self.assertEqual(string, str(city))
+
+    def test_get(self):
+        """test the get method of the db storage"""
+        city = list(models.storage.all(City).values())[0].id
+        result = models.storage.get(City, city)
+        self.assertEqual(result.id, city)
+        self.assertTrue(type(city).__name__, 'City')
+
+    def test_count(self):
+        """test the count method of the db storage"""
+        city = list(models.storage.all(City).values())
+        length = models.storage.count(City)
+        self.assertEqual(length, len(city))

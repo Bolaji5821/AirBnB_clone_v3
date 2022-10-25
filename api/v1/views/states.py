@@ -1,9 +1,9 @@
 #!/usr/bin/python3
 """Module state.py: starts all routes with `state`"""
 from api.v1.views import app_views
-from flask import jsonify, request, abort
 from models.state import State
 from models import storage
+from flask import jsonify, request, abort
 
 
 @app_views.route('/states',
@@ -17,7 +17,7 @@ def states():
         if response is None:
             abort(400, description='Not a JSON')
 
-        if 'name' not in list(response.keys()):
+        if 'name' not in response.keys():
             abort(400, description='Missing name')
         new_state = State(**response)
         new_state.save()
@@ -33,24 +33,22 @@ def states():
 def state(state_id):
     """returns a state based on the id"""
 
-    for state in storage.all(State).values():
+    state = storage.get(State, state_id)
+    if state is None:
+        abort(404)
 
-        if state.id == state_id:
+    if request.method == 'DELETE':
+        state.delete()
+        storage.save()
+        return '{}'
 
-            if request.method == 'DELETE':
-                state.delete()
-                storage.save()
-                return '{}'
-
-            if request.method == 'PUT':
-                response = request.get_json()
-                if response is None:
-                    abort(400, description='Not a JSON')
-                for k, v in response.items():
-                    if k.endswith('ated_at') or k == 'id':
-                        continue
-                    setattr(state, k, v)
-                state.save()
-            return jsonify(state.to_dict())
-
-    abort(404)
+    if request.method == 'PUT':
+        response = request.get_json()
+        if response is None:
+            abort(400, description='Not a JSON')
+        for k, v in response.items():
+            if k.endswith('ated_at') or k == 'id':
+                continue
+            setattr(state, k, v)
+        state.save()
+    return jsonify(state.to_dict())
