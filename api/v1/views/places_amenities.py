@@ -40,7 +40,3 @@ def place_amenity(place_id, amenity_id):
     result = [i for i in place.amenities if i.place_id == place_id]
     if result:
         return result[0].to_dict()
-
-
-
-
