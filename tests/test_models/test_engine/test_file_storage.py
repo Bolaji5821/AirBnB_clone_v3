@@ -37,20 +37,12 @@ class TestFileStorageDocs(unittest.TestCase):
         self.assertEqual(result.total_errors, 0,
                          "Found code style errors (and warnings).")
 
-<<<<<<< HEAD
-    def test_pep8_conformance_test_file_storage(self):
-        """Test tests/test_models/test_file_storage.py conforms to PEP8."""
-        pep8s = pep8.StyleGuide(quiet=True)
-        result = pep8s.check_files(['tests/test_models/test_engine/\
-test_file_storage.py'])
-=======
     def test_pycodestyle_conformance_test_file_storage(self):
         """Test tests/test_models/test_file_storage.py
-        conforms to pycodestyle."""
-        pycodestyles = pycodestyle.StyleGuide(quiet=True)
+        conforms to pep8."""
+        pycodestyles = pep8.StyleGuide(quiet=True)
         file = 'tests/test_models/test_engine/test_file_storage.py'
         result = pycodestyles.check_files([file])
->>>>>>> c34a7f99f2e23cc7240a97ccd3bb70f2c3e6b989
         self.assertEqual(result.total_errors, 0,
                          "Found code style errors (and warnings).")
 
