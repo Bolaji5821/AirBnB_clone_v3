@@ -115,12 +115,12 @@ class TestCity(unittest.TestCase):
 
     def test_get(self):
         """test the get method of the db storage"""
-        if models.storage.count(City) == 0:
-            break
-        city = list(models.storage.all(City).values())[0].id
-        result = models.storage.get(City, city)
-        self.assertEqual(result.id, city)
-        self.assertTrue(type(city).__name__, 'City')
+        dic = {"name": "Vecindad"}
+        instance = City(**dic)
+        models.storage.new(instance)
+        models.storage.save()
+        get_instance = models.storage.get(City, instance.id)
+        self.assertEqual(get_instance, instance)
 
     def test_count(self):
         """test the count method of the db storage"""

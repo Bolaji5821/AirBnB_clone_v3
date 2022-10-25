@@ -107,12 +107,12 @@ class TestAmenity(unittest.TestCase):
 
     def test_get(self):
         """test the get method of the db storage"""
-        if models.storage.count(Amenity) == 0:
-            break
-        amenity = list(models.storage.all(Amenity).values())[0].id
-        result = models.storage.get(Amenity, amenity)
-        self.assertEqual(result.id, amenity)
-        self.assertTrue(type(amenity).__name__, 'Amenity')
+        dic = {"name": "Vecindad"}
+        instance = Amenity(**dic)
+        models.storage.new(instance)
+        models.storage.save()
+        get_instance = models.storage.get(Amenity, instance.id)
+        self.assertEqual(get_instance, instance)
 
     def test_count(self):
         """test the count method of the db storage"""

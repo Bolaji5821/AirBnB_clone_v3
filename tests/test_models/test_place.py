@@ -201,15 +201,15 @@ class TestPlace(unittest.TestCase):
 
     def test_get(self):
         """test the get method of the db storage"""
-        place = list(models.storage.all(Place).values())[0].id
-        result = models.storage.get(Place, place)
-        self.assertEqual(result.id, place)
-        self.assertTrue(type(place).__name__, 'Place')
+        dic = {"name": "Vecindad"}
+        instance = Place(**dic)
+        models.storage.new(instance)
+        models.storage.save()
+        get_instance = models.storage.get(Place, instance.id)
+        self.assertEqual(get_instance, instance)
 
     def test_count(self):
         """test the count method of the db storage"""
-        if models.storage.count(Place) == 0:
-            break
         place = list(models.storage.all(Place).values())
         length = models.storage.count(Place)
         self.assertEqual(length, len(place))
