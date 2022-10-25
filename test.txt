@@ -1,0 +1,6 @@
+POST http://0.0.0.0:5000/api/v1/cities/724f14c0-271e-4344-b28f-aa6d78423aa9/places -d '{"name":"Vancouver", "user_id":"1e13888d-7b06-4aab-a4ab-e29ba91354a0"}'
+State:4a467f28-82b6-4878-bff1-d1847ea4c2ec
+City:724f14c0-271e-4344-b28f-aa6d78423aa9
+Amenity:cc34a816-2ccb-49ed-8d1a-cb333e3abeff
+Place:ca6fb6cf-bf79-4582-b16a-a09c2ec4189a
+fa7eb608-e8fb-44be-a330-f9e847c511f5

@@ -5,6 +5,7 @@ from flask import jsonify, request, abort
 from models.place import Place
 from models.amenity import Amenity
 from models import storage
+import os
 
 
 @app_views.route('/places/<place_id>/amenities',
@@ -16,28 +17,40 @@ def place_amenities(place_id):
     if place is None:
         abort(404)
 
-    amenity = [v.to_dict() for v in place.amenities]
-    return jsonify(amenity)
+    if os.getenv('HBNB_TYPE_STORAGE') == 'db':
+        amenities = place.amenities
+    else:
+        amenities = place.amenity_ids
+
+    result = [i.to_dict() for i in amenities]
+    return jsonify(result)
 
 
 @app_views.route('/places/<place_id>/amenities/<amenity_id>',
-                 methods=['DELETE, POST'],
+                 methods=['DELETE', 'POST'],
                  strict_slashes=False)
 def place_amenity(place_id, amenity_id):
     """deletes or clinks amenity to a place"""
     place = storage.get(Place, place_id)
-    if place is None:
-        abort(404)
-
     amenity = storage.get(Amenity, amenity_id)
-    if amenity is None:
+
+    if amenity is None or place is None:
         abort(404)
 
-    if request.method == 'DELETE':
-        amenity.delete()
-        storage.save()
-        return '{}'
+    if os.getenv("HBNB_TYPE_STORAGE") == 'db':
+        amenities = place.amenities
+    else:
+        amenities = place.amenity_ids
 
-    result = [i for i in place.amenities if i.place_id == place_id]
-    if result:
-        return result[0].to_dict()
+    if request.method == 'POST':
+        if amenity in amenities:
+            return jsonify(amenity.to_dict())
+        place.amenities.append(amenity)
+        place.save()
+        return jsonify(amenity.to_dict()), 201
+
+    if amenity not in amenities:
+        abort(404)
+    place.amenities.remove(amenity)
+    place.save()
+    return '{}'
