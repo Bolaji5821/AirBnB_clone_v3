@@ -2,7 +2,7 @@
 """Module places_amenities.py: contains amenity information"""
 from api.v1.views import app_views
 from flask import jsonify, request, abort
-from models.place import Place, place_amenity
+from models.place import Place
 from models.amenity import Amenity
 from models import storage
 
@@ -24,6 +24,7 @@ def place_amenities(place_id):
                  methods=['DELETE, POST'],
                  strict_slashes=False)
 def place_amenity(place_id, amenity_id):
+    """deletes or clinks amenity to a place"""
     place = storage.get(Place, place_id)
     if place is None:
         abort(404)

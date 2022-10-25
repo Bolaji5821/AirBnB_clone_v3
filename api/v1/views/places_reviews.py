@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""Module users.py: contains users information"""
+"""Module places.py: contains users information"""
 from api.v1.views import app_views
 from flask import jsonify, request, abort
 from models.review import Review
