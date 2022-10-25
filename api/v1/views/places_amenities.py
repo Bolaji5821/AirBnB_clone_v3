@@ -1,5 +1,7 @@
 #!/usr/bin/python3
-"""Module users.py: contains users information"""
+"""Module places_amenities.py: contains amenity information"""
+from api.v1.views import app_views
+from flask import jsonify, request, abort
 from models.place import Place, place_amenity
 from models.amenity import Amenity
 from models import storage
@@ -8,7 +10,7 @@ from models import storage
 @app_views.route('/places/<place_id>/amenities',
                  methods=['GET'],
                  strict_slashes=False)
-def amenities(place_id):
+def place_amenities(place_id):
     """displays all amenities to a place"""
     place = storage.get(Place, place_id)
     if place is None:
@@ -21,7 +23,7 @@ def amenities(place_id):
 @app_views.route('/places/<place_id>/amenities/<amenity_id>',
                  methods=['DELETE, POST'],
                  strict_slashes=False)
-def amenity(place_id, amenity_id):
+def place_amenity(place_id, amenity_id):
     place = storage.get(Place, place_id)
     if place is None:
         abort(404)
@@ -38,7 +40,7 @@ def amenity(place_id, amenity_id):
     result = [i for i in place.amenities if i.place_id == place_id]
     if result:
         return result[0].to_dict()
-    
-    
+
+
 
 
