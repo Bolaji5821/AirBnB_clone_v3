@@ -4,8 +4,9 @@
 from models.user import User
 import os
 
-kwargs = {"name":"johnnie", "password":"herty"}
-u = User(**kwargs)
-print(u.to_dict())
+my_dict = {}
+if not my_dict:
+	print('yes')
+
 
 
