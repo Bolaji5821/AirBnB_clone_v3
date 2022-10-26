@@ -5,6 +5,7 @@ Contains class BaseModel
 
 from datetime import datetime
 import models
+import hashlib
 from os import getenv
 import sqlalchemy
 from sqlalchemy import Column, String, DateTime
@@ -28,10 +29,16 @@ class BaseModel:
 
     def __init__(self, *args, **kwargs):
         """Initialization of the base model"""
+
+        if 'password' in kwargs.keys():
+            psswrd = kwargs['password'].encode()
+            kwargs['password'] = hashlib.md5(psswrd).hexdigest()
+
         if kwargs:
             for key, value in kwargs.items():
                 if key != "__class__":
                     setattr(self, key, value)
+
             if kwargs.get("created_at", None) and type(self.created_at) is str:
                 self.created_at = datetime.strptime(kwargs["created_at"], time)
             else:
@@ -61,6 +68,8 @@ class BaseModel:
     def to_dict(self):
         """returns a dictionary containing all keys/values of the instance"""
         new_dict = self.__dict__.copy()
+        if getenv('HBNB_TYPE_STORAGE') == 'db':
+            new_dict.pop('password')
         if "created_at" in new_dict:
             new_dict["created_at"] = new_dict["created_at"].strftime(time)
         if "updated_at" in new_dict:
